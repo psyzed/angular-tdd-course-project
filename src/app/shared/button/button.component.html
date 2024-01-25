@@ -1,0 +1,16 @@
+<button
+  class="btn btn-primary"
+  type="button"
+  [disabled]="disabled || isLoading"
+  (click)="onClick()"
+>
+  <span *ngIf="!isLoading">{{ text }}</span>
+  <span
+    *ngIf="isLoading"
+    class="spinner-border spinner-border-sm"
+    role="status"
+    aria-hidden="true"
+  >
+  </span>
+  <span class="loading-text" *ngIf="isLoading">Loading...</span>
+</button>
