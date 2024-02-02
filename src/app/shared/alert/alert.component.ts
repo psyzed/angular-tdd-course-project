@@ -9,4 +9,5 @@ import { Component, Input } from '@angular/core';
 })
 export class AlertComponent {
   @Input() public alertText = '';
+  @Input() public alertType!: 'success' | 'danger';
 }

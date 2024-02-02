@@ -9,15 +9,16 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
+import { NgClass, NgIf } from '@angular/common';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { ButtonComponent } from '../shared/button/button.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 let requestBody: any;
 let counter = 0;
 const server = setupServer(
   http.post('/api/1.0/users', async ({ request }) => {
     requestBody = await request.json();
-    console.log(requestBody);
     counter += 1;
     return new HttpResponse(null, {
       status: 200,
@@ -34,7 +35,16 @@ beforeAll(() => server.listen());
 afterAll(() => server.close());
 
 const setup = async () => {
-  await render(SignUpComponent, { imports: [HttpClientTestingModule, AlertComponent, ButtonComponent] });
+  await render(SignUpComponent, {
+    imports: [
+      HttpClientTestingModule,
+      NgClass,
+      NgIf,
+      AlertComponent,
+      ButtonComponent,
+      ReactiveFormsModule,
+    ],
+  });
 };
 
 describe('SignUpComponent', () => {
@@ -89,12 +99,18 @@ describe('SignUpComponent', () => {
 describe('interactions', () => {
   it('enables the button when pass fields have the same value', async () => {
     await setup();
+    const usernameInputEl: HTMLInputElement =
+      screen.getByPlaceholderText('Username');
+    const emailInputEl: HTMLInputElement =
+      screen.getByPlaceholderText('E-mail');
     const passwordInputElement: HTMLInputElement =
       screen.getByPlaceholderText('Password');
     const confirmPasswordInputElement: HTMLInputElement =
       screen.getByPlaceholderText('Confirm Password');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(usernameInputEl, 'user1');
+    await userEvent.type(emailInputEl, 'user@gmail.com');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     expect(submitButtonElement).toHaveAttribute('type', 'button');
     expect(submitButtonElement).toBeEnabled();
@@ -113,8 +129,8 @@ describe('interactions', () => {
       screen.getByPlaceholderText('Confirm Password');
     await userEvent.type(usernameInputEl, 'user1');
     await userEvent.type(emailInputEl, 'user@gmail.com');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     expect(submitButtonElement).toHaveAttribute('type', 'button');
     expect(submitButtonElement).toBeEnabled();
@@ -124,8 +140,8 @@ describe('interactions', () => {
     expect(body).toEqual({
       username: 'user1',
       email: 'user@gmail.com',
-      password: 'password',
-      confirmPassword: 'password',
+      password: 'Password1',
+      confirmPassword: 'Password1',
     });
   });
 
@@ -142,8 +158,8 @@ describe('interactions', () => {
       screen.getByPlaceholderText('Confirm Password');
     await userEvent.type(usernameInputEl, 'user1');
     await userEvent.type(emailInputEl, 'user@gmail.com');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     expect(submitButtonElement).toHaveAttribute('type', 'button');
     expect(submitButtonElement).toBeEnabled();
@@ -165,8 +181,8 @@ describe('interactions', () => {
       screen.getByPlaceholderText('Confirm Password');
     await userEvent.type(usernameInputEl, 'user1');
     await userEvent.type(emailInputEl, 'user@gmail.com');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     expect(
       screen.queryByRole('status', { hidden: true })
@@ -188,8 +204,8 @@ describe('interactions', () => {
       screen.getByPlaceholderText('Confirm Password');
     await userEvent.type(usernameInputEl, 'user1');
     await userEvent.type(emailInputEl, 'user@gmail.com');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     expect(
       screen.queryByText('Please check your e-mail to activate your account')
@@ -218,8 +234,8 @@ describe('interactions', () => {
       screen.getByPlaceholderText('Confirm Password');
     await userEvent.type(usernameInputEl, 'user1');
     await userEvent.type(emailInputEl, 'user@gmail.com');
-    await userEvent.type(passwordInputElement, 'password');
-    await userEvent.type(confirmPasswordInputElement, 'password');
+    await userEvent.type(passwordInputElement, 'Password1');
+    await userEvent.type(confirmPasswordInputElement, 'Password1');
     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
     await userEvent.click(submitButtonElement);
     const request = httpTestingController.expectOne('/api/1.0/users');
@@ -227,5 +243,71 @@ describe('interactions', () => {
     expect(request.request.method).toEqual('POST');
     await request.flush({});
     expect(form).toBeInTheDocument();
+  });
+
+  //   it(`displays email in use when email is not unique`, async () => {
+  //     server.use(
+  //       http.post('/api/1.0/users', async ({ request }) => {
+  //         requestBody = await request.json();
+  //         counter += 1;
+  //         return new HttpResponse(null, {
+  //           status: 400,
+  //         });
+  //       })
+  //     );
+  //     await setup();
+  //     const submitButtonElement = screen.getByRole('button', { name: 'Sign Up' });
+  //     await userEvent.click(submitButtonElement);
+  //     const errorMessage = await screen.findByText('E-mail in use');
+  //     expect(errorMessage).toBeInTheDocument();
+  //   });
+});
+
+describe('validations', () => {
+  it.each`
+    placeholder           | inputValue              | message
+    ${'Username'}         | ${'{space}{backspace}'} | ${'Username is required'}
+    ${'Username'}         | ${'123'}                | ${'Username must have more than 3 characters'}
+    ${'E-mail'}           | ${'{space}{backspace}'} | ${'Email is required'}
+    ${'E-mail'}           | ${'user'}               | ${'Please enter a valid Email'}
+    ${'Password'}         | ${'{space}{backspace}'} | ${'Password is required'}
+    ${'Password'}         | ${'password'}           | ${'Password must have at least 1 uppercase, 1 lowercase and 1 number'}
+    ${'Confirm Password'} | ${'pass'}               | ${'Passwords should match'}
+  `(
+    'displays $message when $label has the value "$inputValue"',
+    async ({ placeholder, inputValue, message }) => {
+      await setup();
+      const input: HTMLInputElement = screen.getByPlaceholderText(placeholder);
+      expect(screen.queryByText(message)).not.toBeInTheDocument();
+      await userEvent.type(input, inputValue);
+      await userEvent.tab();
+      expect(screen.queryByText(message)).toBeInTheDocument();
+    }
+  );
+
+  it('error message if username empty', async () => {
+    await setup();
+    const form = screen.getByTestId('sign-up-form');
+    const usernameInputEl: HTMLInputElement =
+      screen.getByPlaceholderText('Username');
+    expect(screen.queryByText('Username is required')).not.toBeInTheDocument();
+    await userEvent.click(usernameInputEl);
+    await userEvent.tab();
+    expect(screen.queryByText('Username is required')).toBeInTheDocument();
+  });
+
+  it('username too short', async () => {
+    await setup();
+    const form = screen.getByTestId('sign-up-form');
+    const usernameInputEl: HTMLInputElement =
+      screen.getByPlaceholderText('Username');
+    expect(
+      screen.queryByText('Username must have more than 3 characters')
+    ).not.toBeInTheDocument();
+    await userEvent.type(usernameInputEl, 'use');
+    await userEvent.tab();
+    expect(
+      screen.queryByText('Username must have more than 3 characters')
+    ).toBeInTheDocument();
   });
 });

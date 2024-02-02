@@ -1,0 +1,12 @@
+<div data-testid="activation-page">
+  <h1>Activation page</h1>
+</div>
+
+<app-alert [alertType]="alertType" [alertText]="notificationMessage"></app-alert>
+
+<span
+    *ngIf="isLoading"
+    class="spinner-border spinner-border-sm"
+    role="status"
+    aria-hidden="true"
+  >

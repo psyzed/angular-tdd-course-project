@@ -1,0 +1,37 @@
+<div class="card">
+  <div class="card-header text-center">
+    <h3>Users</h3>
+  </div>
+  <ul class="list-group list-group-flush">
+    @for (user of users; track user.id) {
+    <li class="list-group-item list-group-item-action">{{ user.username }}</li>
+    } @empty {
+    <li class="list-group-item list-group-item-action">There are no items.</li>
+    }
+  </ul>
+  <div class="crad-footer text-center">
+    @if(hasPreviousBtn && !isLoading) {
+    <button
+      class="btn btn-outline-secondary btn-sm float-left"
+      data-testid="previous"
+      (click)="onLoadUsers(-1)"
+    >
+      &lt; Previous
+    </button>
+    } @if(hasNextPages && !isLoading) {
+    <button
+      class="btn btn-outline-secondary btn-sm float-right"
+      data-testid="next"
+      (click)="onLoadUsers(1)"
+    >
+      Next &gt;
+    </button>
+    } @if(isLoading) {
+    <span
+      class="spinner-border spinner-border-sm"
+      role="status"
+      aria-hidden="true"
+    ></span>
+    }
+  </div>
+</div>
