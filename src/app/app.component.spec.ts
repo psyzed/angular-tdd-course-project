@@ -245,7 +245,7 @@ describe('AppComponent', () => {
       expect(logoutLinkElement).toBeTruthy();
     });
 
-    it('should clear local storage and redirected to login page when user logs out', async () => {
+    it('should clear local storage, send logout request and redirected to login page when user logs out', async () => {
       await setuplogin();
       const logoutLinkElement: HTMLAnchorElement =
         appComponent.querySelector('a[title="Logout"]')!;
