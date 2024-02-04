@@ -111,7 +111,6 @@ describe('SignUpComponent', () => {
     const setupForm = async () => {
       httpTestingController = TestBed.inject(HttpTestingController);
       signUp = fixture.nativeElement;
-      fixture.whenStable();
       const userNameInputEl: HTMLInputElement = signUp.querySelector(
         'input[formControlName="username"]'
       )!;

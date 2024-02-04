@@ -13,8 +13,21 @@
       </span>
     </div>
     <ul class="navbar-nav">
+      @if(!(authService.isLoggedIn$ | async)) {
       <a class="nav-link" routerLink="signup" title="Sign up"> Sign Up </a>
       <a class="nav-link" routerLink="login" title="Login"> Login </a>
+      } @if(authService.user$ | async; as user) {
+      <a class="nav-link" [routerLink]="['/user', user.id]" title="My Profile">
+        My Profile
+      </a>
+      <a
+        class="nav-link"
+        style="cursor: pointer"
+        (click)="onLogout()"
+        title="Logout"
+        >Logout</a
+      >
+      }
     </ul>
   </div>
 </nav>

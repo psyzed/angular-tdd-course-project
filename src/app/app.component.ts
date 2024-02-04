@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -11,6 +12,12 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private authService = inject(AuthService);
+
   title = 'source';
+
+  ngOnInit(): void {
+    this.authService.getUserFromLocalStorage();
+  }
 }

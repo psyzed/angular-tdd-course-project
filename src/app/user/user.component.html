@@ -1,3 +1,22 @@
 <div data-testid="user-page">
-  <h1>User</h1>
+  <div class="card">
+    <div class="card-header text-center">
+      <img src="../../assets/profile.png" class="rounded-circle" width="100" />
+    </div>
+
+    <div class="card-body text-center">
+      @if (user) {
+      <h5 class="card-title text-center">User E-mail: {{ user.email }}</h5>
+      <p class="card-text text-center">Username {{ user.username }}</p>
+      } @else {
+      <h3 class="text-center">User Not Found</h3>
+      } @if(isLoading) {
+      <span
+        class="spinner-border spinner-border-sm text"
+        role="status"
+        aria-hidden="true"
+      ></span>
+      }
+    </div>
+  </div>
 </div>

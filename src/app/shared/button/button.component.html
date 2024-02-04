@@ -3,6 +3,7 @@
   type="button"
   [disabled]="disabled || isLoading"
   (click)="onClick()"
+  [ngClass]="disabled ? 'disabled' : ''"
 >
   <span *ngIf="!isLoading">{{ text }}</span>
   <span

@@ -3,16 +3,19 @@ import { UserService } from '../core/user.service';
 import { map, take } from 'rxjs';
 import { User, UserPage } from '../core/user.model';
 import { NgFor, NgIf } from '@angular/common';
+import { Router, RouterLink } from '@angular/router';
+import { UserListItemComponent } from './user-list-item/user-list-item.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [NgFor, NgIf],
+  imports: [NgFor, NgIf, RouterLink, UserListItemComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss',
 })
 export class UserListComponent implements OnInit {
   private userService = inject(UserService);
+  private router = inject(Router);
 
   public users: User[] = [];
   public pagination: { page: number; size: number; totalPages: number } = {
@@ -54,5 +57,9 @@ export class UserListComponent implements OnInit {
   get hasPreviousBtn(): boolean {
     const { page } = this.pagination;
     return page > 0;
+  }
+
+  onNavigate(id: number): void {
+    this.router.navigate(['/user/', id]);
   }
 }

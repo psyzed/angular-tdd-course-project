@@ -12,6 +12,10 @@ export interface User {
   email: string;
 }
 
+export interface LoggedInUser extends User {
+  isLoggedIn: boolean;
+}
+
 export interface UserPage {
   content: User[];
   page: number;

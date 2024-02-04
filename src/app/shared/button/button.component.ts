@@ -6,7 +6,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './button.component.html',
-  styles: ``,
+  styles: [
+    `
+      .disabled {
+        cursor: not-allowed;
+      }
+    `,
+  ],
 })
 export class ButtonComponent {
   @Input() public disabled = false;

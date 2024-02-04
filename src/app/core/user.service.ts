@@ -9,6 +9,10 @@ import { User, UserPage, UserSignupInfo } from './user.model';
 export class UserService {
   private _http = inject(HttpClient);
 
+  authenticate(creds: { email: string; password: string }): Observable<User> {
+    return this._http.post<User>('/api/1.0/auth', creds);
+  }
+
   signUp(user: UserSignupInfo): Observable<UserSignupInfo> {
     return this._http.post<UserSignupInfo>('/api/1.0/users', user);
   }
@@ -17,6 +21,10 @@ export class UserService {
     return this._http.get<UserPage>('/api/1.0/users', {
       params: { size: 3, page },
     });
+  }
+
+  getUserById(id: string): Observable<User> {
+    return this._http.get<User>('/api/1.0/users/' + id);
   }
 
   isEmailTaken(email: string): Observable<UserSignupInfo> {

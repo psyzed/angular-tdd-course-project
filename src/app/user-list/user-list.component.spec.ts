@@ -5,6 +5,7 @@ import {
   TestRequest,
 } from '@angular/common/http/testing';
 import { UserListComponent } from './user-list.component';
+import { ActivatedRoute } from '@angular/router';
 
 const getPage = (page: number, size: number) => {
   let start = page * size;
@@ -61,6 +62,14 @@ const response = {
   totalPages: 4,
 };
 
+const activatedRouteMock = {
+  snapshot: {
+    params: {
+      id: '123',
+    },
+  },
+};
+
 const parsePageParams = (req: TestRequest) => {
   let size = Number.parseInt(req.request.params.get('size')!);
   let page = Number.parseInt(req.request.params.get('page')!);
@@ -80,6 +89,7 @@ describe('UserListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UserListComponent, HttpClientTestingModule],
+      providers: [{ provide: ActivatedRoute, useValue: activatedRouteMock }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(UserListComponent);
