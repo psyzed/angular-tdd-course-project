@@ -6,7 +6,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ButtonComponent } from '../shared/button/button.component';
-import { UserService } from '../core/user.service';
 import { Subject, take, takeUntil, timer, firstValueFrom } from 'rxjs';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { NgClass } from '@angular/common';
@@ -26,7 +25,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public hasError = false;
 
   private formBuilder = inject(FormBuilder);
-  private userService = inject(UserService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -47,7 +45,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         (res) => {
           this.isLoading = false;
-          this.authService.setUser(res);
           this.router.navigate(['/']);
         },
         (err) => {

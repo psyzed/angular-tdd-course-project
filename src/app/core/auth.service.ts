@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { LoggedInUser, User } from './user.model';
-import { BehaviorSubject, Observable, map } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { BrowserStorageService } from './localStorage.service';
 import { HttpClient } from '@angular/common/http';
 
@@ -39,7 +39,11 @@ export class AuthService {
   }
 
   authenticate(creds: { email: string; password: string }): Observable<User> {
-    return this._http.post<User>('/api/1.0/auth', creds);
+    return this._http.post<User>('/api/1.0/auth', creds).pipe(
+      tap((res) => {
+        this.setUser(res);
+      })
+    );
   }
 
   logout(): Observable<{ message: string }> {
