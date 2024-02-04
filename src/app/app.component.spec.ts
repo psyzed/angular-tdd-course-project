@@ -252,6 +252,10 @@ describe('AppComponent', () => {
       expect(logoutLinkElement).toBeTruthy();
       logoutLinkElement.click();
       localStorage.removeItem('user');
+      const userdata = localStorage.getItem('user');
+      expect(userdata).toBeNull();
+      const req = httpTestingController.expectOne('/api/1.0/logout');
+      expect(req).not.toBeNull();
       await router.navigate(['/login']);
       const loginPage: HTMLElement = appComponent.querySelector(
         '[data-testid="login-page"]'

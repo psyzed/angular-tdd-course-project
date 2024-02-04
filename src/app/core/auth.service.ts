@@ -2,12 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { LoggedInUser, User } from './user.model';
 import { BehaviorSubject, Observable, map } from 'rxjs';
 import { BrowserStorageService } from './localStorage.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private userSubject = new BehaviorSubject<LoggedInUser | null>(null);
+  private _http = inject(HttpClient);
 
   public user$: Observable<LoggedInUser | null> =
     this.userSubject.asObservable();
@@ -36,8 +38,13 @@ export class AuthService {
     }
   }
 
-  logout(): void {
+  authenticate(creds: { email: string; password: string }): Observable<User> {
+    return this._http.post<User>('/api/1.0/auth', creds);
+  }
+
+  logout(): Observable<{ message: string }> {
     this.localStorage.remove('user');
     this.userSubject.next(null);
+    return this._http.post<{ message: string }>('/api/1.0/logout', {});
   }
 }

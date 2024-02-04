@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { AsyncPipe } from '@angular/common';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
@@ -15,7 +16,16 @@ export class NavbarComponent {
   private router = inject(Router);
 
   onLogout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+    this.authService
+      .logout()
+      .pipe(take(1))
+      .subscribe(
+        (res) => {
+          this.router.navigate(['/login']);
+        },
+        (err) => {
+          console.error(err);
+        }
+      );
   }
 }

@@ -9,10 +9,6 @@ import { User, UserPage, UserSignupInfo } from './user.model';
 export class UserService {
   private _http = inject(HttpClient);
 
-  authenticate(creds: { email: string; password: string }): Observable<User> {
-    return this._http.post<User>('/api/1.0/auth', creds);
-  }
-
   signUp(user: UserSignupInfo): Observable<UserSignupInfo> {
     return this._http.post<UserSignupInfo>('/api/1.0/users', user);
   }
