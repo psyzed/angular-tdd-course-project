@@ -1,0 +1,51 @@
+<div class="col-lg-6 offset-lg-3 col-md-8 offset-md-2">
+  <div class="card" data-testid="login-page">
+    <div class="card-header">
+      <h1>Login</h1>
+    </div>
+    <form class="card-body" [formGroup]="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email</label>
+        <input
+          id="email"
+          placeholder="Enter Your Email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="emailErrors ? 'is-invalid' : ''"
+        />
+        @if (emailErrors) {
+        <div class="invalid-feedback" data-testid="email-validation-error">
+          {{ emailErrors }}
+        </div>
+        }
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          id="password"
+          placeholder="Password"
+          formControlName="password"
+          type="password"
+          class="form-control"
+          [ngClass]="passwordErrors ? 'is-invalid' : ''"
+        />
+        @if (passwordErrors) {
+        <div class="invalid-feedback" data-testid="password-validation-error">
+          {{ passwordErrors }}
+        </div>
+        }
+      </div>
+      <div class="text-center">
+        <app-button
+          [disabled]="loginForm.invalid || isLoading"
+          text="Login"
+          (onClicked)="onLogin()"
+          [isLoading]="isLoading"
+        ></app-button>
+      </div>
+    </form>
+  </div>
+  @if(hasError) {
+  <app-alert [alertType]="'danger'" alertText="Login Failed"></app-alert>
+  }
+</div>

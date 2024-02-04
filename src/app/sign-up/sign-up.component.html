@@ -1,0 +1,103 @@
+<div
+  *ngIf="showSignUpForm; else successMessage"
+  class="col-lg-6 offset-lg-3 col-md-8 offset-md-2"
+  data-testid="signup-page"
+>
+  <div class="card" data-testid="sign-up-form">
+    <div class="card-header">
+      <h1>Sign Up</h1>
+    </div>
+    <div>
+      <form class="card-body" [formGroup]="signUpForm">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            id="username"
+            placeholder="Username"
+            formControlName="username"
+            class="form-control"
+            [ngClass]="usernameError ? 'is-invalid' : ''"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="usernameError"
+            data-testid="username-validation-error"
+          >
+            {{ usernameError }}
+          </div>
+        </div>
+        <label for="email" class="form-label">E-mail</label>
+        <div class="mb-3">
+          <input
+            id="email"
+            placeholder="E-mail"
+            formControlName="email"
+            class="form-control"
+            [ngClass]="emailError ? 'is-invalid' : ''"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="emailError"
+            data-testid="email-validation-error"
+          >
+            {{ emailError }}
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            id="password"
+            placeholder="Password"
+            formControlName="password"
+            type="password"
+            class="form-control"
+            [ngClass]="passwordError ? 'is-invalid' : ''"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="passwordError"
+            data-testid="password-validation-error"
+          >
+            {{ passwordError }}
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="confirm-password" class="form-label"
+            >Confirm Password</label
+          >
+          <input
+            id="confirm-password"
+            placeholder="Confirm Password"
+            formControlName="confirmPassword"
+            type="password"
+            class="form-control"
+            [ngClass]="formErrors ? 'is-invalid' : ''"
+          />
+          <div
+            class="invalid-feedback"
+            *ngIf="formErrors"
+            data-testid="confirmPassword-validation-error"
+          >
+            {{ formErrors }}
+          </div>
+        </div>
+        <div class="text-center">
+          <app-button
+            [disabled]="!signUpForm.valid"
+            [isLoading]="isLoading"
+            text="Sign Up"
+            (onClicked)="onSubmit()"
+          ></app-button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<ng-template #successMessage>
+  <app-alert
+    alertText="Please check your e-mail to activate your account"
+    alertType="success"
+  ></app-alert>
+</ng-template>
